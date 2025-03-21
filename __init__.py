@@ -9,18 +9,18 @@ keys = {}
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
+    
+@app.route('/set_key/', methods=['GET'])
+def set_key_get():
+    global user_key, f
+    key = request.args.get('key')
 
-@app.route('/set_key/', methods=['POST'])
-def set_key():
-    data = request.get_json()
-    if 'key' not in data:
+    if not key:
         return jsonify({'error': 'Please provide a key.'}), 400
 
     try:
-        user_key = data['key'].encode()  # Convertir la clé en bytes
-        fernet_instance = Fernet(user_key)  # Vérifier si la clé est valide
-        user_id = request.remote_addr  # Exemple d'identifiant (IP), à remplacer par un vrai identifiant utilisateur
-        keys[user_id] = fernet_instance
+        user_key = key.encode()
+        f = Fernet(user_key)
         return jsonify({'message': 'Key set successfully.'}), 200
     except Exception:
         return jsonify({'error': 'Invalid key format.'}), 400
