@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Dictionnaire pour stocker les clés des utilisateurs (idéalement, utiliser une base de données)
 keys = {}
 
-@app.route('/')
+@app.route('/') #route
 def hello_world():
     return render_template('hello.html')
     
